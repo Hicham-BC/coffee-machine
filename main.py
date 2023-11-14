@@ -47,16 +47,16 @@ def deliver_order():
     """
     price = MENU[drink]["cost"]
 
-    if check_ingredients():
+    if ingredients_sufficient():
         print(f"Your order's Price is: ${price}")
         print("Please Insert Coins.")
-        if count_change():
+        if transaction_successful():
             make_drink()
             print(f"Here is Your {drink}, Enjoy!!!")
             return True
     return False
 
-def check_ingredients():
+def ingredients_sufficient():
     """
     Check if there are enough ingredients for the requested drink.
 
@@ -72,26 +72,36 @@ def check_ingredients():
     
     return True
 
-def count_change():
+def process_coins():
+    """
+    Prompt the user to insert coins and calculate the total amount received.
+
+    Returns:
+    - The total amount received from the user as coins.
+    """
+    coins = int(input("\tquarters: $")) * 0.25
+    coins += int(input("\tdimes: $")) * 0.10
+    coins += int(input("\tnickels: $")) * 0.05
+    coins += int(input("\tpennies: $")) * 0.01
+
+    return coins
+
+def transaction_successful():
     """
     Calculate change based on the coins inserted and handle insufficient payment.
 
     Returns:
-    - True if the payment is sufficient; False otherwise.
+    - True if the Transaction is successful; False otherwise.
     """
-    quarters = float(input("\tquarters: $")) * 0.25
-    dimes = float(input("\tdimes: $")) * 0.10
-    nickels = float(input("\tnickels: $")) * 0.05
-    pennies = float(input("\tpennies: $")) * 0.01
     price = MENU[drink]["cost"]
-    received_pay = quarters + dimes + nickels + pennies
+    money_received = process_coins()
 
-    if received_pay > price:
-        print(f"Here is Your Change: ${round(received_pay - price, 2)}")
+    if money_received > price:
+        print(f"Here is Your Change: ${round(money_received - price, 2)}")
         return True
-    elif received_pay < price:
+    elif money_received < price:
         print(f"Sorry, That's Not Enough Money.")
-        print(f"Here is Your Inserted Money: ${round(received_pay, 2)}")
+        print(f"Here is Your Inserted Money: ${round(money_received, 2)}")
         print(f"Please Re-order and Insert The Required Money.")
         return False
     else: return True
