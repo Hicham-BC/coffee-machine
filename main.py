@@ -1,11 +1,20 @@
 from data import *
 
 def display_resources():
+    """
+    Display the current status of available resources and money.
+    """
     for key,value in resources.items():
         print(f"{key}: {value}")
     print(f"money: ${money}")
 
 def check_order():
+    """
+    Check if the requested drink is available and process the order.
+    
+    Returns:
+    - The profit earned from the order (zero if the order is not available).
+    """
     orders = ["espresso", "latte", "cappuccino", "report"]
 
     if drink in orders:
@@ -21,6 +30,12 @@ def check_order():
     return 0
 
 def deliver_order():
+    """
+    Handle the payment process, deliver the ordered drink, and manage change.
+
+    Returns:
+    - True if the order is successfully delivered; False otherwise.
+    """
     price = MENU[drink]["cost"]
 
     if check_ingredients():
@@ -32,6 +47,12 @@ def deliver_order():
     return False
 
 def check_ingredients():
+    """
+    Check if there are enough ingredients for the requested drink.
+
+    Returns:
+    - True if there are enough ingredients; False otherwise.
+    """
     ingredients = MENU[drink]["ingredients"]
 
     for key,value in ingredients.items():
@@ -44,6 +65,12 @@ def check_ingredients():
     return True
 
 def count_change():
+    """
+    Calculate change based on the coins inserted and handle insufficient payment.
+
+    Returns:
+    - True if the payment is sufficient; False otherwise.
+    """
     quarters = float(input("\tquarters: $")) * 0.25
     dimes = float(input("\tdimes: $")) * 0.10
     nickels = float(input("\tnickels: $")) * 0.05
@@ -65,10 +92,15 @@ def count_change():
         return False
     else: return True
 
-
+# Initialize money variable
 money = 0
+# Main loop for coffee machine operations
 while True:
+    # Prompt the user to enter their drink choice
     drink = input("What would you like? (Espresso/Latte/Cappuccino): ").lower()
+    # Check if the user wants to turn off the coffee machine
     if drink == "off":
         break
+    
+    # Process the user's order and update the money variable
     money += check_order()
