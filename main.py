@@ -8,6 +8,15 @@ def display_resources():
         print(f"{key}: {value}")
     print(f"money: ${money}")
 
+def make_drink():
+    """
+    Deduct the required ingredients from available resources to prepare the ordered drink.
+    """
+    ingredients = MENU[drink]['ingredients']
+
+    for key,value in ingredients.items():
+        resources[key] -= value
+
 def check_order():
     """
     Check if the requested drink is available and process the order.
@@ -42,6 +51,7 @@ def deliver_order():
         print(f"Your order's Price is: ${price}")
         print("Please Insert Coins.")
         if count_change():
+            make_drink()
             print(f"Here is Your {drink}, Enjoy!!!")
             return True
     return False
@@ -60,8 +70,6 @@ def check_ingredients():
             print(f"Sorry There is not Enough {key}.")
             return False
     
-    for key,value in ingredients.items():
-        resources[key] -= value
     return True
 
 def count_change():
@@ -82,10 +90,6 @@ def count_change():
         print(f"Here is Your Change: ${round(received_pay - price, 2)}")
         return True
     elif received_pay < price:
-        ingredients = MENU[drink]["ingredients"]
-        for key,value in ingredients.items():
-            resources[key] += value
-        
         print(f"Sorry, That's Not Enough Money.")
         print(f"Here is Your Inserted Money: ${round(received_pay, 2)}")
         print(f"Please Re-order and Insert The Required Money.")
